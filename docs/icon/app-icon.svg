@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 时迹 · 应用图标矢量源文件（浅色、时间 + 文件意象，16px 仍可辨识） -->
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 256 256" role="img"
+     aria-label="时迹 应用图标">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#F4FBFE"/>
+      <stop offset="1" stop-color="#D6EBF3"/>
+    </linearGradient>
+    <linearGradient id="clock" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#4FB6CC"/>
+      <stop offset="1" stop-color="#2A8FA8"/>
+    </linearGradient>
+  </defs>
+
+  <!-- 底板 -->
+  <rect x="8" y="8" width="240" height="240" rx="48" fill="url(#bg)" stroke="#C4DFE9" stroke-width="2"/>
+
+  <!-- 文件（带折角） -->
+  <g>
+    <path d="M46 68a14 14 0 0 1 14-14h78l30 30v116a14 14 0 0 1-14 14H60a14 14 0 0 1-14-14z"
+          fill="#FFFFFF" stroke="#A9CFDC" stroke-width="3"/>
+    <path d="M138 54l30 30h-22a8 8 0 0 1-8-8z" fill="#E3F1F6" stroke="#A9CFDC" stroke-width="3"/>
+    <!-- 文本行 -->
+    <rect x="64" y="104" width="72" height="9" rx="4.5" fill="#CBE1EA"/>
+    <rect x="64" y="126" width="88" height="9" rx="4.5" fill="#CBE1EA"/>
+    <rect x="64" y="148" width="56" height="9" rx="4.5" fill="#CBE1EA"/>
+  </g>
+
+  <!-- 时钟（右下角，深青，保证小尺寸可辨） -->
+  <g>
+    <circle cx="176" cy="176" r="52" fill="#FFFFFF"/>
+    <circle cx="176" cy="176" r="44" fill="url(#clock)"/>
+    <path d="M176 148v28" stroke="#FFFFFF" stroke-width="8" stroke-linecap="round"/>
+    <path d="M176 176h26" stroke="#FFFFFF" stroke-width="8" stroke-linecap="round"/>
+    <circle cx="176" cy="176" r="5" fill="#FFFFFF"/>
+  </g>
+</svg>

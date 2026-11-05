@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>时迹 · 文件时间筛选器</title>
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<svg class="sprite" aria-hidden="true" focusable="false">
+  <symbol id="i-folder" viewBox="0 0 24 24"><path d="M3 7.5A1.5 1.5 0 0 1 4.5 6h4l2 2H19.5A1.5 1.5 0 0 1 21 9.5v8A1.5 1.5 0 0 1 19.5 19h-15A1.5 1.5 0 0 1 3 17.5z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="m16 16 4.2 4.2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.4" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M12 7.6v5l3 1.8" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></symbol>
+  <symbol id="i-image" viewBox="0 0 24 24"><rect x="3.5" y="4.5" width="17" height="15" rx="2.2" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="9" cy="10" r="1.7" fill="currentColor"/><path d="m5 17.5 4.6-4.3 3.1 2.7 2.5-2.1 4.3 3.7" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></symbol>
+  <symbol id="i-doc" viewBox="0 0 24 24"><path d="M6.2 3.8h7.4l4.2 4.2v12H6.2z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M13.4 3.9V8h4.2M9 12h6M9 15.5h6" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></symbol>
+  <symbol id="i-video" viewBox="0 0 24 24"><rect x="3.4" y="5" width="17.2" height="14" rx="2.2" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="m10 9.6 4.6 2.4-4.6 2.4z" fill="currentColor"/></symbol>
+  <symbol id="i-audio" viewBox="0 0 24 24"><path d="M14.5 5.5v10.2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="9.4" cy="16.4" r="3.4" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M14.5 6.2l5-1.3v3.2l-5 1.3z" fill="none" stroke="currentColor" stroke-width="1.4"/></symbol>
+  <symbol id="i-archive" viewBox="0 0 24 24"><path d="M4 8h16v10.5H4z" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M3.4 4.8h17.2V8H3.4z" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M10.2 11.6h3.6v3h-3.6z" fill="none" stroke="currentColor" stroke-width="1.4"/></symbol>
+  <symbol id="i-code" viewBox="0 0 24 24"><path d="m9 7.5-4.4 4.5 4.4 4.5M15 7.5l4.4 4.5-4.4 4.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-app" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="3" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M8.5 14.4 11 9.5h2l2.5 4.9M9.6 12.4h4.8" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></symbol>
+  <symbol id="i-file" viewBox="0 0 24 24"><path d="M6.2 3.8h7.4l4.2 4.2v12H6.2z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M13.4 3.9V8h4.2" fill="none" stroke="currentColor" stroke-width="1.4"/></symbol>
+  <symbol id="i-locate" viewBox="0 0 24 24"><path d="M4.5 10.2V6.4A1.9 1.9 0 0 1 6.4 4.5h3.8M14 4.5h3.6A1.9 1.9 0 0 1 19.5 6.4v3.8M19.5 14v3.6a1.9 1.9 0 0 1-1.9 1.9H14M10.2 19.5H6.4A1.9 1.9 0 0 1 4.5 17.6V14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="12" cy="12" r="2.2" fill="none" stroke="currentColor" stroke-width="1.4"/></symbol>
+  <symbol id="i-close" viewBox="0 0 24 24"><path d="m7 7 10 10M17 7 7 17" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="m5.5 12.5 4.4 4.2 8.6-9" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-warn" viewBox="0 0 24 24"><path d="M12 4.4 21 19.6H3z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M12 9.6v4.6M12 16.9v.6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M4 12h15.2M13.4 6.4l5.8 5.6-5.8 5.6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M19.2 12a7.2 7.2 0 1 1-2.4-5.4M19.4 4.6v4.2h-4.2" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></symbol>
+  <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.4" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M12 11v5.4M12 7.9v.6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></symbol>
+  <symbol id="i-up" viewBox="0 0 24 24"><path d="M12 19V5.4M6.4 11 12 5.4l5.6 5.6" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-chevron" viewBox="0 0 24 24"><path d="m9.5 6 6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-layers" viewBox="0 0 24 24"><path d="m12 4 8 4.3-8 4.3-8-4.3z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="m4 13.4 8 4.3 8-4.3" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></symbol>
+</svg>
+
+<header class="topbar">
+  <div class="brand">
+    <div class="brand-mark" aria-hidden="true">
+      <svg viewBox="0 0 32 32">
+        <circle cx="16" cy="16" r="11.4" fill="none" stroke="currentColor" stroke-width="1.5" opacity=".35"/>
+        <path d="M16 6.4a9.6 9.6 0 1 1-9.4 10.9" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round"/>
+        <path d="M16 10.6V16l4 2.4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        <circle cx="16" cy="16" r="1.6" fill="currentColor"/>
+      </svg>
+    </div>
+    <div class="brand-text">
+      <h1>时迹</h1>
+      <p>按修改时间筛选并整理文件</p>
+    </div>
+  </div>
+  <div class="topbar-side">
+    <span class="privacy"><span class="dot"></span>本地处理 · 文件不会离开这台电脑</span>
+    <span class="version" id="about-chip" title="查看程序信息">v1.0.0</span>
+  </div>
+</header>
+
+<div class="browser-banner" id="browser-banner" hidden>
+  <svg class="banner-ico"><use href="#i-info"/></svg>
+  <span class="banner-text" id="browser-banner-text"></span>
+  <a class="banner-link" id="webview2-download" href="https://go.microsoft.com/fwlink/p/?LinkId=2124703" target="_blank" rel="noopener">下载 WebView2</a>
+  <button class="banner-close" id="browser-banner-close" aria-label="关闭提示"><svg><use href="#i-close"/></svg></button>
+</div>
+
+<main class="workspace">
+  <aside class="panel rail">
+    <div class="rail-scroll">
+      <section class="block">
+        <div class="block-head"><span class="step">01</span><h2>源文件夹</h2></div>
+        <div class="dropzone" id="drop-zone">
+          <div class="dz-main">
+            <span class="dz-icon" id="dz-icon"><svg><use href="#i-folder"/></svg></span>
+            <div class="dz-copy">
+              <p class="dz-title" id="dz-title">拖拽文件夹到此处</p>
+              <p class="dz-path" id="source-path" title="">尚未选择</p>
+            </div>
+          </div>
+          <button class="btn btn-soft btn-small" id="btn-pick-source">选择文件夹</button>
+        </div>
+      </section>
+
+      <section class="block">
+        <div class="block-head"><span class="step">02</span><h2>时间范围</h2><span class="block-hint">按修改时间</span></div>
+        <div class="preset-grid" id="preset-grid">
+          <button class="preset" data-preset="today">今天</button>
+          <button class="preset" data-preset="week">近 7 天</button>
+          <button class="preset" data-preset="month30">近 30 天</button>
+          <button class="preset" data-preset="month">本月</button>
+          <button class="preset" data-preset="custom">自定义</button>
+          <button class="preset" data-preset="all">全部时间</button>
+        </div>
+        <div class="custom-range" id="custom-range" hidden>
+          <label class="mini-field"><span>开始</span><input type="date" id="date-start" /></label>
+          <span class="range-dash">—</span>
+          <label class="mini-field"><span>结束</span><input type="date" id="date-end" /></label>
+        </div>
+        <p class="range-note" id="range-note"></p>
+      </section>
+
+      <section class="block">
+        <div class="block-head"><span class="step">03</span><h2>筛选条件</h2></div>
+        <div class="switch-row">
+          <div class="switch-copy">
+            <span class="switch-label">包含子文件夹</span>
+            <span class="switch-hint">关闭时只扫描当前目录</span>
+          </div>
+          <label class="switch"><input type="checkbox" id="opt-recursive" checked /><span class="track"></span></label>
+        </div>
+        <label class="field">
+          <span class="field-label">扩展名过滤 <em>可选</em></span>
+          <input type="text" id="opt-extensions" placeholder="如 jpg, pdf；留空为全部" autocomplete="off" />
+        </label>
+        <label class="field">
+          <span class="field-label">文件名关键字 <em>可选</em></span>
+          <input type="text" id="opt-keyword" placeholder="输入关键字，扫描时过滤" autocomplete="off" />
+        </label>
+        <p class="field-note">以上条件在扫描时生效；结果区的搜索与筛选不会重新读取磁盘。</p>
+      </section>
+    </div>
+
+    <div class="scan-area">
+      <div class="job-line" id="scan-progress" hidden>
+        <div class="bar"><i class="bar-fill" id="scan-bar"></i></div>
+        <div class="job-meta">
+          <span class="job-text" id="scan-text">准备中…</span>
+          <button class="link-btn" id="btn-cancel-scan">取消</button>
+        </div>
+      </div>
+      <button class="btn btn-primary btn-block" id="btn-scan">
+        <svg class="btn-ico"><use href="#i-search"/></svg><span id="btn-scan-label">扫描文件</span>
+      </button>
+      <p class="scan-hint">只读取文件信息，不会修改任何内容</p>
+    </div>
+  </aside>
+
+  <section class="panel results">
+    <header class="results-head">
+      <div class="title-row">
+        <h2>扫描结果</h2>
+        <div class="summary" id="result-summary">
+          <span class="summary-item"><b id="sum-folders">0</b><span>文件夹</span></span>
+          <span class="summary-sep"></span>
+          <span class="summary-item"><b id="sum-files">0</b><span>文件</span></span>
+          <span class="summary-sep"></span>
+          <span class="summary-item"><b id="sum-size">0 B</b><span>合计</span></span>
+        </div>
+        <span class="filter-flag" id="filter-flag" hidden>筛选中</span>
+        <span class="title-note" id="scan-note"></span>
+      </div>
+      <div class="toolbar">
+        <label class="search-box">
+          <svg><use href="#i-search"/></svg>
+          <input type="search" id="search-input" placeholder="搜索当前层级的文件夹或文件" autocomplete="off" />
+        </label>
+        <select id="type-filter" class="select" title="按类型筛选">
+          <option value="all">全部类型</option>
+        </select>
+        <select id="sort-select" class="select" title="排序方式">
+          <option value="mtime_desc">修改时间 · 新 → 旧</option>
+          <option value="mtime_asc">修改时间 · 旧 → 新</option>
+          <option value="name_asc">文件名 · A → Z</option>
+          <option value="name_desc">文件名 · Z → A</option>
+          <option value="size_desc">大小 · 大 → 小</option>
+          <option value="size_asc">大小 · 小 → 大</option>
+        </select>
+      </div>
+      <div class="crumb-bar">
+        <button class="crumb-up" id="btn-up" title="返回上一级" disabled>
+          <svg><use href="#i-up"/></svg><span>上一级</span>
+        </button>
+        <div class="crumbs" id="crumbs"></div>
+        <span class="spacer"></span>
+        <span class="level-meta" id="level-meta"></span>
+      </div>
+    </header>
+
+    <div class="table-wrap" id="table-wrap">
+      <table class="file-table mode-folders" id="file-table">
+        <thead>
+          <tr>
+            <th class="col-check"><label class="check"><input type="checkbox" id="check-all" disabled /><span></span></label></th>
+            <th class="col-type">类型</th>
+            <th class="col-name" id="th-name">名称</th>
+            <th class="col-count" id="th-count">命中文件</th>
+            <th class="col-size" id="th-size">大小</th>
+            <th class="col-time" id="th-time">最近命中</th>
+            <th class="col-act"></th>
+          </tr>
+        </thead>
+        <tbody id="tbody"></tbody>
+      </table>
+      <div class="empty-state" id="empty-state">
+        <div class="empty-art">
+          <svg viewBox="0 0 120 96" aria-hidden="true">
+            <circle cx="60" cy="52" r="34" fill="none" stroke="currentColor" stroke-width="1" opacity=".18"/>
+            <circle cx="60" cy="52" r="24" fill="none" stroke="currentColor" stroke-width="1" opacity=".28"/>
+            <rect x="30" y="38" width="34" height="40" rx="5" fill="#fff" stroke="currentColor" stroke-width="1.2" opacity=".8"/>
+            <rect x="36" y="47" width="22" height="2.4" rx="1.2" fill="currentColor" opacity=".35"/>
+            <rect x="36" y="54" width="16" height="2.4" rx="1.2" fill="currentColor" opacity=".25"/>
+            <rect x="36" y="61" width="20" height="2.4" rx="1.2" fill="currentColor" opacity=".25"/>
+            <circle cx="74" cy="62" r="15" fill="#fff" stroke="currentColor" stroke-width="1.2"/>
+            <path d="M74 53.5v8.5l5.2 3" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+            <path d="M16 18h18M10 26h24" stroke="currentColor" stroke-width="1" opacity=".2"/>
+            <path d="M103 30v14M96 37h14" stroke="currentColor" stroke-width="1" opacity=".2"/>
+          </svg>
+        </div>
+        <h3 id="empty-title">先选择一个文件夹开始扫描</h3>
+        <p id="empty-sub">选择源文件夹与时间范围后，这里会列出符合条件的所有文件。</p>
+      </div>
+      <div class="load-more" id="load-more" hidden>
+        <button class="btn btn-ghost btn-small" id="btn-load-more">加载更多</button>
+      </div>
+    </div>
+
+    <footer class="export-bar">
+      <div class="export-line">
+        <span class="export-label">导出到</span>
+        <div class="dest-field" id="dest-path" title=""><span class="dest-text">未选择导出文件夹</span></div>
+        <button class="btn btn-soft btn-small" id="btn-pick-dest">选择文件夹</button>
+        <span class="spacer"></span>
+        <div class="segmented" id="mode-seg" role="group" aria-label="导出方式">
+          <button class="seg" data-mode="copy" aria-pressed="true">复制</button>
+          <button class="seg" data-mode="move" aria-pressed="false">剪切</button>
+        </div>
+        <label class="inline-opt">
+          <span>保留目录结构</span>
+          <label class="switch switch-small"><input type="checkbox" id="opt-preserve" checked /><span class="track"></span></label>
+        </label>
+        <label class="inline-opt">
+          <span>重名</span>
+          <select id="opt-conflict" class="select select-small">
+            <option value="skip">跳过并记录</option>
+            <option value="rename">自动加序号</option>
+            <option value="overwrite">覆盖</option>
+          </select>
+        </label>
+      </div>
+      <div class="export-line export-line-main">
+        <span class="sel-summary" id="selection-summary">已选 <b>0</b> 个文件 · 0 B</span>
+        <span class="spacer"></span>
+        <button class="btn btn-ghost btn-small" id="btn-select-all" disabled>全选当前结果</button>
+        <button class="btn btn-ghost btn-small" id="btn-clear-selection" disabled>清除勾选</button>
+        <button class="btn btn-primary" id="btn-export" disabled>
+          <svg class="btn-ico"><use href="#i-layers"/></svg><span>导出</span>
+        </button>
+      </div>
+      <div class="export-progress" id="export-progress" hidden>
+        <div class="bar"><i class="bar-fill" id="export-bar"></i></div>
+        <div class="job-meta">
+          <span class="job-text" id="export-text">准备中…</span>
+          <button class="link-btn" id="btn-cancel-export">取消</button>
+        </div>
+      </div>
+    </footer>
+  </section>
+</main>
+
+<div class="toasts" id="toasts" aria-live="polite"></div>
+
+<div class="modal-backdrop" id="modal" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <button class="modal-close" id="modal-close" aria-label="关闭"><svg><use href="#i-close"/></svg></button>
+    <div class="modal-mark" id="modal-mark"><svg><use href="#i-check"/></svg></div>
+    <h3 id="modal-title">导出完成</h3>
+    <p class="modal-sub" id="modal-sub"></p>
+    <div class="stat-grid">
+      <div class="stat"><b id="stat-ok">0</b><span>成功</span></div>
+      <div class="stat"><b id="stat-skip">0</b><span>跳过</span></div>
+      <div class="stat"><b id="stat-fail">0</b><span>失败</span></div>
+    </div>
+    <div class="modal-rows" id="modal-rows"></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" id="btn-open-dest">打开导出文件夹</button>
+      <button class="btn btn-primary" id="btn-modal-done">完成</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="about-modal" hidden>
+  <div class="modal modal-about" role="dialog" aria-modal="true" aria-labelledby="about-title">
+    <button class="modal-close" id="about-close" aria-label="关闭"><svg><use href="#i-close"/></svg></button>
+    <h3 id="about-title">时迹 · 文件时间筛选器</h3>
+    <p class="modal-sub">按文件修改时间筛选并复制/剪切到目标文件夹。全部在本机完成。</p>
+    <dl class="about-list">
+      <dt>版本</dt><dd id="about-version">v1.0.0</dd>
+      <dt>配置文件</dt><dd id="about-config" class="mono">—</dd>
+      <dt>界面引擎</dt><dd id="about-engine">Microsoft Edge WebView2</dd>
+    </dl>
+    <div class="modal-actions">
+      <button class="btn btn-primary" id="about-done">知道了</button>
+    </div>
+  </div>
+</div>
+
+<!--TFP_BRIDGE-->
+<script src="app.js"></script>
+</body>
+</html>
